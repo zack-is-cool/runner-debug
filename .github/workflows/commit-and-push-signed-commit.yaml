@@ -1,4 +1,4 @@
-name: Random Text Commit to push-debug
+name: Sign Random Text Commit using GraphQL
 
 # Trigger manually with workflow_dispatch
 on:
