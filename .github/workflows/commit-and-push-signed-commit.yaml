@@ -3,7 +3,7 @@ name: Sign Random Text Commit using GraphQL
 # Trigger when a specific command is added as a comment to a PR
 on:
   issue_comment:
-    types: [created]
+  pull_request:
   workflow_dispatch:
 
 permissions:
