@@ -45,4 +45,5 @@ jobs:
         with:
           commit_message: "sign and push changes using graphql"
           repo: ${{ github.repository }}
-          branch: push-debug
+          branch: "push-debug"
+          empty: true
