@@ -40,8 +40,8 @@ jobs:
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git add random_text_file.txt
-          git commit -m "Add random text to random_text_file.txt"
+          # git add random_text_file.txt
+          # git commit -m "Add random text to random_text_file.txt" maybe dont commit here
           git --no-pager log -1 --format="%H"
 
       - uses: hmarr/debug-action@v3
