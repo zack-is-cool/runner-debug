@@ -47,3 +47,5 @@ jobs:
           repo: ${{ github.repository }}
           branch: "push-debug"
           empty: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
