@@ -1,0 +1,48 @@
+name: Sign Random Text Commit using GraphQL
+
+# Trigger manually with workflow_dispatch
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate_commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - uses: actions/checkout@v3
+
+      # Step 2: Switch to the "push-debug" branch or create it if it doesn't exist
+      - name: Check out or create push-debug branch
+        run: |
+          git fetch origin
+          if git show-ref --verify --quiet refs/remotes/origin/push-debug; then
+            git checkout push-debug
+          else
+            git checkout -b push-debug
+          fi
+
+      # Step 3: Generate random text and write to a file
+      - name: Generate random text and write to file
+        run: |
+          RANDOM_TEXT=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)
+          echo "Random text: $RANDOM_TEXT" > random_text_file.txt
+
+      # Step 4: Configure Git user for the commit
+      - name: Set up Git user info and commit the stuff
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add random_text_file.txt
+          git commit -m "Add random text to random_text_file.txt"
+
+      - name: Sign and push changes using graphql
+        uses: planetscale/ghcommit-action@v0.2.0
+        with:
+          commit_message: "sign and push changes using graphql"
+          repo: ${{ github.repository }}
+          branch: push-debug
