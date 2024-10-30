@@ -12,9 +12,6 @@ permissions:
 
 jobs:
   generate_commit:
-    # Only run if the comment is on a pull request and matches the specific command
-    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/sign-commit' }}
-
     runs-on: ubuntu-latest
 
     steps:
