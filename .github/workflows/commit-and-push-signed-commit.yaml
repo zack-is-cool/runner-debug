@@ -1,8 +1,9 @@
 name: Sign Random Text Commit using GraphQL
 
-# Trigger manually with workflow_dispatch
+# Trigger when a specific command is added as a comment to a PR
 on:
-  workflow_dispatch:
+  pull_request:
+    branches: [push-debug]
 
 permissions:
   contents: write
@@ -33,16 +34,22 @@ jobs:
           echo "Random text: $RANDOM_TEXT" > random_text_file.txt
 
       # Step 4: Configure Git user for the commit
-      - name: Set up Git user info and commit the stuff
+      - name: Set up Git user info and commit the changes
         run: |
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git add random_text_file.txt
           git commit -m "Add random text to random_text_file.txt"
+          git --no-pager log -1 --format="%H"
 
-      - name: Sign and push changes using graphql
+      - uses: hmarr/debug-action@v3
+
+      - name: Sign and push changes using GraphQL
         uses: planetscale/ghcommit-action@v0.2.0
         with:
-          commit_message: "sign and push changes using graphql"
+          commit_message: "sign and push changes using GraphQL"
           repo: ${{ github.repository }}
-          branch: push-debug
+          branch: "push-debug"
+          empty: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
