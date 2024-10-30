@@ -45,6 +45,8 @@ jobs:
           git add random_text_file.txt
           git commit -m "Add random text to random_text_file.txt"
 
+      - uses: hmarr/debug-action@v3
+
       - name: Sign and push changes using GraphQL
         uses: planetscale/ghcommit-action@v0.2.0
         with:
