@@ -51,7 +51,7 @@ jobs:
         with:
           commit_message: "sign and push changes using GraphQL"
           repo: ${{ github.repository }}
-          branch: "push-debug"
+          branch: ${{ github.head_ref || github.ref_name }}
           empty: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
