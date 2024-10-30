@@ -1,0 +1,44 @@
+name: Random Text Commit to push-debug
+
+# Trigger manually with workflow_dispatch
+on:
+  workflow_dispatch:
+
+jobs:
+  generate_commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - uses: actions/checkout@v3
+
+      # Step 2: Switch to the "push-debug" branch or create it if it doesn't exist
+      - name: Check out or create push-debug branch
+        run: |
+          git fetch origin
+          if git show-ref --verify --quiet refs/remotes/origin/push-debug; then
+            git checkout push-debug
+          else
+            git checkout -b push-debug
+          fi
+
+      # Step 3: Generate random text and write to a file
+      - name: Generate random text and write to file
+        run: |
+          RANDOM_TEXT=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 16)
+          echo "Random text: $RANDOM_TEXT" > random_text_file.txt
+
+      # Step 4: Configure Git user for the commit
+      - name: Set up Git user info
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+      # Step 5: Commit and push the changes to push-debug branch
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add random_text_file.txt
+          git commit -m "Add random text to random_text_file.txt"
+          git push origin push-debug
